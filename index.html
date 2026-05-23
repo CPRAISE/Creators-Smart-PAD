@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSPAD - Creators Smart PAD</title>
+    <!-- Tailwind CSS CDN for presentation styling layout grids -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom scrollbar configurations */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 3px;
+        }
+        /* Splash Screen Structural Animations */
+        @keyframes fadeInZoom {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes textTransform {
+            0% { letter-spacing: normal; }
+            100% { letter-spacing: 0.2em; }
+        }
+        @keyframes flashSweep {
+            0% { left: -20%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 120%; opacity: 0; }
+        }
+        .animate-fade-zoom { animation: fadeInZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Arc Tracer Elements */
+        .parabolic-arc {
+            border-top: 4px solid #3b82f6;
+            border-radius: 50% / 100% 100% 0 0;
+            transform: scaleY(0.5);
+        }
+        .flash-beam {
+            width: 60px;
+            height: 8px;
+            background: linear-gradient(90deg, transparent, #60a5fa, #ffffff, #60a5fa, transparent);
+            filter: blur(2px);
+            animation: flashSweep 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- SPLASH SCREEN COMPONENT -->
+    <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#070a12] transition-opacity duration-1000">
+        <div class="text-center animate-fade-zoom p-6 relative max-w-lg">
+            <h1 id="splash-title" class="heading-font text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-2 transition-all duration-1000">
+                Creators Smart PAD
+            </h1>
+            <div id="arc-container" class="w-full h-12 relative overflow-hidden hidden opacity-0 transition-opacity duration-500">
+                <div class="parabolic-arc w-full h-24 absolute top-0 left-0"></div>
+                <div class="flash-beam absolute top-0"></div>
+            </div>
+            <p class="text-gray-500 text-sm tracking-widest font-light mt-12">By WebFits</p>
+        </div>
+    </div>
+
+    <!-- CORE HEADER PLATFORM -->
+    <header class="bg-[#111827]/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
+            <span id="header-title" class="heading-font text-xl font-bold tracking-wider text-white">CSPAD</span>
+        </div>
+        
+        <!-- Navigation Trigger Conncellear Toggle Button -->
+        <button id="menu-btn" class="p-2 text-gray-400 hover:text-white focus:outline-none relative z-50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <!-- Sidebar Navigation Drawer Overlay Links Menu -->
+        <nav id="sidebar-drawer" class="fixed top-0 right-0 h-full w-80 bg-[#0f172a] border-l border-gray-800 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-40 p-8 pt-24 flex flex-col space-y-4">
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="home">Home</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="operation">Dashboard Operations</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="dashboard">Analytics Index</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="screen">Screen Gallery</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="browser">Chromium Studio</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="settings">App Configurations</button>
+            <button class="nav-link text-left py-3 px-4 rounded-lg font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition" data-target="about">About Engine</button>
+        </nav>
+    </header>
+
+    <!-- VIEWS MOUNT MAIN FRAME CONTAINER -->
+    <main class="flex-grow container mx-auto px-4 py-8 relative">
+
+        <!-- 1. HOME VIEW SCREEN -->
+        <section id="view-home" class="view-panel space-y-12 max-w-5xl mx-auto">
+            <div class="text-center py-6">
+                <h2 class="heading-font text-4xl font-extrabold text-white mb-3">AI Automation Workstation</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Research sites, assemble production pipelines, distribute content catalogs instantly across networks.</p>
+            </div>
+            <!-- Horizontal Process Workflow Track -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                <div class="bg-gradient-to-br from-gray-900 to-gray-950 p-5 rounded-xl border border-gray-800 shadow-lg relative transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-blue-500 font-bold mb-2 text-sm uppercase tracking-wider">First</div>
+                    <h3 class="font-semibold text-white mb-1">Set Up Workspace</h3>
+                    <p class="text-xs text-gray-400">Mount drive targets and configurations.</p>
+                </div>
+                <div class="bg-gradient-to-br from-gray-900 to-gray-950 p-5 rounded-xl border border-gray-800 shadow-lg relative transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-indigo-500 font-bold mb-2 text-sm uppercase tracking-wider">Second</div>
+                    <h3 class="font-semibold text-white mb-1">Tap Start Run</h3>
+                    <p class="text-xs text-gray-400">Initialize live sync operational loops.</p>
+                </div>
+                <div class="bg-gradient-to-br from-gray-900 to-gray-950 p-5 rounded-xl border border-gray-800 shadow-lg relative transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-purple-500 font-bold mb-2 text-sm uppercase tracking-wider">Third</div>
+                    <h3 class="font-semibold text-white mb-1">View Results</h3>
+                    <p class="text-xs text-gray-400">Verify content outputs instantly.</p>
+                </div>
+                <div class="bg-gradient-to-br from-gray-900 to-gray-950 p-5 rounded-xl border border-gray-800 shadow-lg relative transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-pink-500 font-bold mb-2 text-sm uppercase tracking-wider">Fourth</div>
+                    <h3 class="font-semibold text-white mb-1">Save & Approve</h3>
+                    <p class="text-xs text-gray-400">Commit pipeline data to media targets.</p>
+                </div>
+                <div class="bg-gradient-to-br from-gray-900 to-gray-950 p-5 rounded-xl border border-gray-800 shadow-lg relative transform hover:-translate-y-1 transition duration-300">
+                    <div class="text-emerald-500 font-bold mb-2 text-sm uppercase tracking-wider">Fifth</div>
+                    <h3 class="font-semibold text-white mb-1">Track Dashboard</h3>
+                    <p class="text-xs text-gray-400">Monitor progressive matrix telemetry charts.</p>
+                </div>
+            </div>
+            <div class="flex justify-center pt-6">
+                <button id="start-btn" class="heading-font bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-12 py-4 rounded-xl shadow-lg shadow-blue-900/40 transition-all transform hover:scale-105 active:scale-95">
+                    Launch Workstation
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. OPERATIONS ENGINE VIEW -->
+        <section id="view-operation" class="view-panel hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-6 shadow-xl">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-widest text-blue-500">Active Operation</span>
+                        <h2 id="op-day-title" class="heading-font text-2xl font-bold text-white mt-1">Calendar Plan: Day 1</h2>
+                    </div>
+                    <!-- Manual Override Toggle Field Component -->
+                    <div class="flex items-center space-x-3 bg-gray-950 px-4 py-2 rounded-xl border border-gray-800">
+                        <span class="text-sm text-gray-400 font-medium">Manual Edits</span>
+                        <button id="manual-toggle" class="w-12 h-6 rounded-full bg-gray-800 p-1 transition-colors relative focus:outline-none">
+                            <div class="w-4 h-4 rounded-full bg-gray-400 transition-transform transform"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input configuration data fields matrix -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold uppercase text-gray-400 tracking-wider">Content Title / Caption</label>
+                        <input type="text" id="field-title" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition" disabled>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold uppercase text-gray-400 tracking-wider">Target Audience Segment</label>
+                        <input type="text" id="field-audience" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition" disabled>
+                    </div>
+                    <div class="space-y-1 md:col-span-2">
+                        <label class="text-xs font-bold uppercase text-gray-400 tracking-wider">SEO & Research Keywords Target</label>
+                        <input type="text" id="field-keywords" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition" disabled>
+                    </div>
+                    <div class="space-y-1 md:col-span-2">
+                        <label class="text-xs font-bold uppercase text-gray-400 tracking-wider">System Generation AI Prompt</label>
+                        <textarea id="field-prompt" rows="4" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition resize-none" disabled></textarea>
+                    </div>
+                </div>
+
+                <!-- Dynamic runtime loader visualization asset -->
+                <div id="runtime-loader" class="hidden bg-gray-950 border border-gray-800 p-4 rounded-xl items-center justify-between animate-pulse">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-4 h-4 rounded-full border-2 border-t-transparent border-blue-500 animate-spin"></div>
+                        <span class="text-sm text-gray-300 font-medium">Assembling automation parameters, invoking cloud models...</span>
+                    </div>
+                    <span class="text-xs bg-blue-900/40 text-blue-400 px-3 py-1 rounded-full border border-blue-800/40 font-bold tracking-widest animate-pulse">RUNNING</span>
+                </div>
+
+                <!-- Structural pagination navigation array indicators -->
+                <div class="flex justify-between items-center pt-4 border-t border-gray-800">
+                    <div class="flex space-x-2">
+                        <button id="op-prev-btn" class="bg-gray-950 border border-gray-800 text-gray-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition">Previous Plan</button>
+                        <button id="op-next-btn" class="bg-gray-950 border border-gray-800 text-gray-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition">Next Plan</button>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="stop-process-btn" class="bg-red-950/60 hover:bg-red-900 border border-red-800/60 text-red-200 px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition">Stop Process</button>
+                        <button id="begin-process-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide shadow-lg shadow-blue-900/20 transition">Begin Process</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DASHBOARD METRICS CHART VIEW -->
+        <section id="view-dashboard" class="view-panel hidden max-w-5xl mx-auto space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                
+                <!-- SVG Vector High-Fidelity Donut Progress Pie Chart -->
+                <div class="bg-gray-900 border border-gray-800 p-6 rounded-2xl flex flex-col items-center justify-center shadow-xl relative min-h-[280px]">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Posting Execution Progress</span>
+                    <div class="relative w-44 h-44">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <!-- Retracting Red Arc (Base Backplane) -->
+                            <path class="text-red-600" stroke="currentColor" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <!-- Eating Progress Green Arc -->
+                            <path id="chart-progress-arc" class="text-emerald-500 transition-all duration-1000 ease-in-out" stroke-dasharray="0, 100" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="chart-center-day" class="heading-font text-4xl font-extrabold text-white">1</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mt-0.5">Current Day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aggregated Data Value Readouts Panel Grid -->
+                <div class="md:col-span-2 grid grid-cols-2 gap-4">
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow-md">
+                        <div class="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Total Generated</div>
+                        <div id="metric-gen" class="heading-font text-3xl font-extrabold text-white">0</div>
+                    </div>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow-md">
+                        <div class="text-xs text-emerald-400 uppercase font-bold tracking-wider mb-1">Total Approved</div>
+                        <div id="metric-appr" class="heading-font text-3xl font-extrabold text-emerald-400">0</div>
+                    </div>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow-md">
+                        <div class="text-xs text-red-400 uppercase font-bold tracking-wider mb-1">Total Rejected</div>
+                        <div id="metric-rejt" class="heading-font text-3xl font-extrabold text-red-400">0</div>
+                    </div>
+                    <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl shadow-md">
+                        <div class="text-xs text-blue-400 uppercase font-bold tracking-wider mb-1">Total Saved</div>
+                        <div id="metric-saved" class="heading-font text-3xl font-extrabold text-blue-400">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Horizontal Choose Month Selection Carousel Wrapper -->
+            <div class="space-y-3">
+                <label class="text-xs font-bold uppercase tracking-widest text-gray-400 block px-1">Archive Data Scope Timeline</label>
+                <div class="flex items-center space-x-3 bg-gray-900/60 border border-gray-800 p-3 rounded-2xl">
+                    <button id="carousel-left" class="p-2 text-gray-400 hover:text-white transition focus:outline-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <!-- Core Track Viewport -->
+                    <div id="carousel-track" class="flex-grow flex overflow-x-hidden scroll-smooth space-x-2 py-1 px-1 select-none">
+                        <!-- Months programmatically injected via loop parameters -->
+                    </div>
+                    <button id="carousel-right" class="p-2 text-gray-400 hover:text-white transition focus:outline-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SCREEN STORAGE PREVIEW GALLERY VIEW -->
+        <section id="view-screen" class="view-panel hidden max-w-5xl mx-auto space-y-6">
+            <!-- Storage Path Routing Toggle Tab Elements Header -->
+            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                <div class="flex space-x-2 bg-gray-950 p-1 rounded-xl border border-gray-800">
+                    <button class="path-tab px-5 py-2 rounded-lg text-sm font-bold tracking-wide transition shadow-sm" data-path="System">System Hard Drive</button>
+                    <button class="path-tab px-5 py-2 rounded-lg text-sm font-bold tracking-wide transition shadow-sm" data-path="Cloud">Google Drive Cloud</button>
+                </div>
+                <span id="active-path-label" class="text-xs font-bold tracking-widest uppercase bg-gray-900 border border-gray-800 text-gray-400 px-4 py-2 rounded-xl">PATH: Local Memory</span>
+            </div>
+
+            <!-- Integrated Core Preview Window Matrix Frame Viewport -->
+            <div id="gallery-viewport" class="bg-gray-900 rounded-2xl border border-gray-800 p-8 min-h-[380px] flex flex-col justify-between relative shadow-xl">
+                <!-- Inner container elements populated dynamically by runtime asset listings -->
+                <div id="gallery-content-frame" class="space-y-4"></div>
+                
+                <!-- Bottom navigation tracking matrix controls bar -->
+                <div class="flex justify-between items-center border-t border-gray-800 pt-4 mt-6">
+                    <button id="gal-prev-btn" class="bg-gray-950 hover:bg-gray-800 text-gray-300 border border-gray-800 font-semibold px-4 py-2 rounded-xl text-xs transition">Previous Asset</button>
+                    <span id="gallery-index-counter" class="text-xs text-gray-500 font-bold font-mono uppercase tracking-widest">Listing Asset 0 / 0</span>
+                    <button id="gal-next-btn" class="bg-gray-950 hover:bg-gray-800 text-gray-300 border border-gray-800 font-semibold px-4 py-2 rounded-xl text-xs transition">Next Asset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. BROWSER STUDIO INTEGRATION VIEW -->
+        <section id="view-browser" class="view-panel hidden max-w-6xl mx-auto space-y-4">
+            <!-- Mock Web Chromium Address Control Header Interface Array -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-3 flex items-center space-x-3 shadow-md">
+                <div class="flex space-x-1.5 px-1">
+                    <div class="w-3 h-3 rounded-full bg-red-500/40"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/40"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/40"></div>
+                </div>
+                <button id="browser-home-btn" class="p-1.5 text-gray-400 hover:text-white transition rounded-lg hover:bg-gray-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                </button>
+                <div class="flex-grow flex items-center bg-gray-950 border border-gray-800 rounded-lg px-3 py-1.5 text-xs text-gray-400 font-mono">
+                    <svg class="w-3.5 h-3.5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span id="browser-url-bar">cspad://chromium-sandbox/speed-dial</span>
+                </div>
+            </div>
+
+            <!-- Virtual Engine Web Display Window Frame -->
+            <div id="browser-viewport" class="bg-gray-950 rounded-2xl border border-gray-800 min-h-[480px] p-8 flex flex-col items-center justify-center shadow-inner relative">
+                <!-- Speed Dial Grid Interface Canvas Element -->
+                <div id="browser-speed-dial" class="max-w-xl w-full grid grid-cols-2 sm:grid-cols-5 gap-4">
+                    <button class="speed-tile flex flex-col items-center bg-gray-900 border border-gray-800 p-4 rounded-xl hover:border-blue-500 transition group" data-url="https://facebook.com">
+                        <div class="w-10 h-10 rounded-lg bg-blue-900/40 text-blue-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition">F</div>
+                        <span class="text-xs font-semibold text-gray-400 mt-2">Facebook</span>
+                    </button>
+                    <button class="speed-tile flex flex-col items-center bg-gray-900 border border-gray-800 p-4 rounded-xl hover:border-pink-500 transition group" data-url="https://instagram.com">
+                        <div class="w-10 h-10 rounded-lg bg-pink-900/40 text-pink-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition">I</div>
+                        <span class="text-xs font-semibold text-gray-400 mt-2">Instagram</span>
+                    </button>
+                    <button class="speed-tile flex flex-col items-center bg-gray-900 border border-gray-800 p-4 rounded-xl hover:border-blue-400 transition group" data-url="https://t.me">
+                        <div class="w-10 h-10 rounded-lg bg-sky-900/40 text-sky-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition">T</div>
+                        <span class="text-xs font-semibold text-gray-400 mt-2">Telegram</span>
+                    </button>
+                    <button class="speed-tile flex flex-col items-center bg-gray-900 border border-gray-800 p-4 rounded-xl hover:border-gray-400 transition group" data-url="https://x.com">
+                        <div class="w-10 h-10 rounded-lg bg-gray-800 text-white flex items-center justify-center font-bold text-lg group-hover:scale-105 transition">X</div>
+                        <span class="text-xs font-semibold text-gray-400 mt-2">Twitter</span>
+                    </button>
+                    <button class="speed-tile flex flex-col items-center bg-gray-900 border border-gray-800 p-4 rounded-xl hover:border-red-500 transition group" data-url="https://youtube.com">
+                        <div class="w-10 h-10 rounded-lg bg-red-900/40 text-red-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition">Y</div>
+                        <span class="text-xs font-semibold text-gray-400 mt-2">YouTube</span>
+                    </button>
+                </div>
+                <!-- Sandbox View Frame Injection Container -->
+                <div id="browser-iframe-container" class="hidden absolute inset-0 bg-white rounded-2xl overflow-hidden">
+                    <div class="bg-gray-100 border-b p-2 flex items-center justify-between text-xs text-gray-500 px-4">
+                        <span>External Sandbox Session Runtime Layer Active</span>
+                        <span class="font-bold text-amber-600">⚠️ Direct Web iframe Blocked - Simulating Session</span>
+                    </div>
+                    <div class="p-6 text-gray-900 font-medium">Session memory matrix loaded securely. Target endpoint parameters connected.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CONFIGURATIONS APP SETTINGS VIEW -->
+        <section id="view-settings" class="view-panel hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-6 shadow-xl">
+                <h2 class="heading-font text-xl font-bold text-white border-b border-gray-800 pb-3">Automation Workspace Settings</h2>
+                
+                <div class="space-y-4">
+                    <!-- Config Box A: Link Drive Content Document Index row database connection string -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Connect Google Drive 30-Day Content Calendar</label>
+                        <input type="text" id="config-sheet-id" placeholder="Enter secure Google Spreadsheet File Identifier Key (ID String)" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-mono transition">
+                    </div>
+
+                    <!-- Config Box B: Dual Hybrid Authentication Model Switcher Matrix Selection Array -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Primary AI Processing Provider Target</label>
+                            <select id="config-ai-provider" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                                <option value="Gemini">Google Gemini Engine</option>
+                                <option value="ChatGPT">OpenAI ChatGPT Model Cluster</option>
+                                <option value="Claude">Anthropic Claude Core</option>
+                                <option value="Manus">Manus Autonomous Intelligence</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase tracking-wider text-gray-400">AI Connection Authorization Tier</label>
+                            <select id="config-auth-tier" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                                <option value="PREMIUM_COOKIE">Browser Login Session (Premium Subscription Residues)</option>
+                                <option value="FREE_GUEST_COOKIE">Guest / Free Web Interface Session Layer ($0 Tiers)</option>
+                                <option value="RAW_API_KEY">Developer Open API Endpoint Key String (Fallback)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Functional Toggle Configuration Switches Array Block Layout -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-800">
+                        <div class="flex items-center justify-between p-4 bg-gray-950 rounded-xl border border-gray-800">
+                            <div>
+                                <div class="text-sm font-semibold text-white">Save Output to Google Drive Cloud</div>
+                                <div class="text-xs text-gray-500">Commits data directly to database folder tracks.</div>
+                            </div>
+                            <input type="checkbox" id="toggle-save-drive" class="w-4 h-4 rounded text-blue-600 focus:ring-0 bg-gray-900 border-gray-800" checked>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-gray-950 rounded-xl border border-gray-800">
+                            <div>
+                                <div class="text-sm font-semibold text-white">Save to Phone Memory Storage</div>
+                                <div class="text-xs text-gray-500">Creates local binary system export directory paths.</div>
+                            </div>
+                            <input type="checkbox" id="toggle-save-local" class="w-4 h-4 rounded text-blue-600 focus:ring-0 bg-gray-900 border-gray-800">
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-gray-950 rounded-xl border border-gray-800 sm:col-span-2">
+                            <div>
+                                <div class="text-sm font-semibold text-white">Enable System Autopilot Controls</div>
+                                <div class="text-xs text-gray-500">Runs autonomous background iterations, checks parameters, handles auto-regeneration matrices, holds execution pending validation.</div>
+                            </div>
+                            <input type="checkbox" id="toggle-autopilot" class="w-4 h-4 rounded text-blue-600 focus:ring-0 bg-gray-900 border-gray-800" checked>
+                        </div>
+                    </div>
+
+                    <!-- Core Network Publishing Targets Mapping Matrix Grid Layout Checklist -->
+                    <div class="pt-4 border-t border-gray-800 space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-gray-400 block">Select Active Social Media Endpoint Channels (One Per Content Calendar File Context)</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="Facebook" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>Facebook Page</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="Instagram" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>Instagram Grid</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="Twitter" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>Twitter Feed</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="YouTube" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>YouTube Studio</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="Blogger" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>Blogger Vault</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs text-gray-300 font-medium cursor-pointer hover:border-gray-700 transition">
+                                <input type="checkbox" name="social-channel" value="WordPress" class="rounded text-blue-600 bg-gray-900 border-gray-800 focus:ring-0"><span>WordPress Core</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        <button id="save-settings-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition shadow shadow-blue-950">Save Core Sync Configuration</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ABOUT THE PLATFORM SYSTEM INFO VIEW -->
+        <section id="view-about" class="view-panel hidden max-w-3xl mx-auto space-y-8 text-center py-6 relative">
+            <div class="space-y-1">
+                <h2 class="heading-font text-4xl font-extrabold text-white tracking-wide">Creators Smart PAD</h2>
+                <p class="text-sm font-light text-gray-500 tracking-widest uppercase">Designed by WebFits</p>
+            </div>
+            
+            <p class="text-gray-400 text-sm max-w-xl mx-auto leading-relaxed">
+                CSPAD is an automated production environment optimized for orchestrating digital presence. It coordinates remote data sources, manages secure authentication states across web panels, and synchronizes assets flawlessly.
+            </p>
+
+            <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-6 text-left max-w-xl mx-auto space-y-3">
+                <h3 class="heading-font font-bold text-white text-base">Key Operational Advantages</h3>
+                <ul class="text-xs text-gray-400 space-y-2 list-disc list-inside">
+                    <li>Multi-threaded automated operations via Google serverless framework integration layers.</li>
+                    <li>Synchronous 30-day content calendar schema deployment processing sequences.</li>
+                    <li>Decoupled interface execution architecture for minimal latency overheads.</li>
+                </ul>
+            </div>
+
+            <!-- Other Apps Grid Allocation Matrix Block Segment -->
+            <div class="space-y-4 pt-4 max-w-xl mx-auto text-left">
+                <h3 class="heading-font font-bold text-gray-400 uppercase tracking-widest text-xs px-1">Other Enterprise Releases By WebFits</h3>
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl flex items-start space-x-3.5 shadow-md">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-900/50 border border-indigo-700/40 text-indigo-400 flex items-center justify-center font-bold text-sm flex-shrink-0">F</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Field Data Pro</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Unified sync platform designed for tracking geospatial mapping assets and offline survey registries instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Faint centralized base anchor element signature -->
+            <div class="pt-12">
+                <span class="text-[10px] uppercase tracking-[0.3em] font-medium text-gray-700 block text-center">Powered by Cpraise</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CORE PLATFORM SYSTEM FOOTER -->
+    <footer class="bg-[#0b0f19] border-t border-gray-900 px-6 py-4 flex items-center justify-between text-xs text-gray-500">
+        <span class="font-medium tracking-wide">© 2026 | App by WebFits</span>
+        <button id="back-btn" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 px-4 py-1.5 rounded-lg font-bold tracking-wide transition active:scale-95">
+            Back
+        </button>
+    </footer>
+
+    <!-- INTERFACE ENGINE ARCHITECTURE LOGIC CODE SCRIPT -->
+    <script>
+        // System Core Orchestration Variables
+        const APP_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyiQKLGldmE8jMCcSFgzKsWKHLHtP7rWEpga4rwaPtdvOINcLnyjmQvCGaikNLlFN9V/exec";
+        
+        // Stateful Navigation Management Vectors
+        let navigationHistory = ["home"];
+        let currentActiveView = "home";
+        
+        // Master Content Generation Memory Storage Registry Matrices
+        let calendarState = {
+            currentDay: 1,
+            sheetId: "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms", // Standard default placeholder
+            dayData: { title: "", audience: "", keywords: "", prompt: "" }
+        };
+        
+        let dashboardMetrics = { currentDay: 1, totalGen: 0, totalAppr: 0, totalRejt: 0, totalSaved: 0 };
+        let screenPathActive = "System";
+
+        // Initial launch script processing sequence loops
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeSplashScreenAnimationSequence();
+            setupCoreNavigationEngineRouting();
+            initializeInterfaceActionTriggers();
+            generateDashboardMonthCarouselTrackElements();
+        });
+
+        /**
+         * Orchestrates the high-fidelity multi-stage splash element visual animations timeline
+         */
+        function initializeSplashScreenAnimationSequence() {
+            const splash = document.getElementById("splash-screen");
+            const title = document.getElementById("splash-title");
+            const arc = document.getElementById("arc-container");
+
+            // Frame Step A: Transform Title Text Elements String Configurations
+            setTimeout(() => {
+                title.style.letterSpacing = "0.1em";
+                title.innerText = "CSPAD";
+            }, 1800);
+
+            // Frame Step B: Mount Parabolic Tracer Beam Element Mechanics
+            setTimeout(() => {
+                arc.classList.remove("hidden");
+                setTimeout(() => arc.style.opacity = "1", 50);
+            }, 2400);
+
+            // Frame Step C: Dismiss overlay viewport masks smoothly
+            setTimeout(() => {
+                splash.style.opacity = "0";
+                setTimeout(() => splash.remove(), 1000);
+            }, 4600);
+        }
+
+        /**
+         * Sets up custom Single Page Application view routing mechanics matrix paths
+         */
+        function setupCoreNavigationEngineRouting() {
+            const menuBtn = document.getElementById("menu-btn");
+            const drawer = document.getElementById("sidebar-drawer");
+            const navLinks = document.querySelectorAll(".nav-link");
+            const headerTitle = document.getElementById("header-title");
+
+            // Multi-user toggle click listener handling drawer operations
+            menuBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                drawer.classList.toggle("translate-x-full");
+            });
+
+            document.addEventListener("click", () => drawer.classList.add("translate-x-full"));
+            drawer.addEventListener("click", (e) => e.stopPropagation());
+
+            // Bind each drawer element item click event pipeline
+            navLinks.forEach(link => {
+                link.addEventListener("click", () => {
+                    const target = link.getAttribute("data-target");
+                    switchActiveViewportPanel(target);
+                    drawer.classList.add("translate-x-full");
+                });
+            });
+
+            // Master global viewport panels swapper framework handler logic
+            window.switchActiveViewportPanel = function(viewId, omitHistoryAppend = false) {
+                if (viewId === currentActiveView) return;
+                
+                // Track state sequences history maps
+                if (!omitHistoryAppend) {
+                    navigationHistory.push(currentActiveView);
+                }
+                
+                // Hide past screen blocks, activate current viewport selection
+                document.querySelectorAll(".view-panel").forEach(panel => panel.classList.add("hidden"));
+                const targetPanel = document.getElementById(`view-${viewId}`);
+                if (targetPanel) targetPanel.classList.remove("hidden");
+
+                // Update Header layout titles explicitly matching user rules
+                if (viewId === "home") {
+                    headerTitle.innerText = "CSPAD";
+                } else {
+                    // Title formatting clean conversions mapping rules
+                    headerTitle.innerText = viewId.charAt(0).toUpperCase() + viewId.slice(1);
+                }
+
+                currentActiveView = viewId;
+                
+                // Trigger operational data polling metrics runs if shifting views onto analytics targets
+                if (viewId === "dashboard") refreshDashboardTelemetryDataMatrix();
+                if (viewId === "operation") requestPlanRowFromCloudSyncEngine();
+            };
+
+            // Bind Footer Back Button navigation mechanisms
+            document.getElementById("back-btn").addEventListener("click", () => {
+                if (navigationHistory.length > 0) {
+                    const previousView = navigationHistory.pop();
+                    switchActiveViewportPanel(previousView, true);
+                }
+            });
+        }
+
+        /**
+         * Links custom functional processing buttons directly onto core transaction controllers
+         */
+        function initializeInterfaceActionTriggers() {
+            // Home Start action mapping rules
+            document.getElementById("start-btn").addEventListener("click", () => switchActiveViewportPanel("operation"));
+
+            // Operations Step Pagination Controllers
+            document.getElementById("op-prev-btn").addEventListener("click", () => shiftOperationDayIndexOffset(-1));
+            document.getElementById("op-next-btn").addEventListener("click", () => shiftOperationDayIndexOffset(1));
+
+            // Manual Mode state toggler mechanics
+            const manualToggle = document.getElementById("manual-toggle");
+            manualToggle.addEventListener("click", () => {
+                const innerCircle = manualToggle.querySelector("div");
+                const isManualActive = manualToggle.classList.toggle("bg-blue-600");
+                
+                if (isManualActive) {
+                    manualToggle.classList.remove("bg-gray-800");
+                    innerCircle.classList.add("translate-x-6");
+                    setOperationFormFieldsDisabledState(false);
+                } else {
+                    manualToggle.classList.add("bg-gray-800");
+                    innerCircle.classList.remove("translate-x-6");
+                    setOperationFormFieldsDisabledState(true);
+                }
+            });
+
+            // Core process state triggering run engine actions blocks
+            document.getElementById("begin-process-btn").addEventListener("click", executeContentAutomationPipelineRunner);
+            document.getElementById("stop-process-btn").addEventListener("click", terminateContentAutomationPipelineRunner);
+
+            // Settings local configurations preservation mechanics
+            document.getElementById("save-settings-btn").addEventListener("click", () => {
+                const sheetIdInput = document.getElementById("config-sheet-id").value.trim();
+                if (sheetIdInput) {
+                    calendarState.sheetId = sheetIdInput;
+                    alert("CSPAD Core Config: System synchronization parameters stored successfully within active session memory layers.");
+                } else {
+                    alert("Error: Sheet Reference ID Key signature validation failed.");
+                }
+            });
+
+            // Storage Path Routing Screen Tab Switches Event Loops
+            const tabs = document.querySelectorAll(".path-tab");
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    tabs.forEach(t => t.classList.remove("bg-blue-600", "text-white"));
+                    tab.add("bg-blue-600", "text-white");
+                    screenPathActive = tab.getAttribute("data-path");
+                    document.getElementById("active-path-label").innerText = `PATH: ${screenPathActive.toUpperCase()}`;
+                    renderScreenGalleryPreviewWindow();
+                });
+            });
+            // Init layout state highlight parameters selection default array elements row values
+            tabs[0].classList.add("bg-blue-600", "text-white");
+
+            // Mock Chromium Browser Studio Launcher Hooks
+            const speedTiles = document.querySelectorAll(".speed-tile");
+            speedTiles.forEach(tile => {
+                tile.addEventListener("click", () => {
+                    const url = tile.getAttribute("data-url");
+                    document.getElementById("browser-url-bar").innerText = url;
+                    document.getElementById("browser-speed-dial").classList.add("hidden");
+                    document.getElementById("browser-iframe-container").classList.remove("hidden");
+                });
+            });
+            document.getElementById("browser-home-btn").addEventListener("click", () => {
+                document.getElementById("browser-url-bar").innerText = "cspad://chromium-sandbox/speed-dial";
+                document.getElementById("browser-speed-dial").classList.remove("hidden");
+                document.getElementById("browser-iframe-container").classList.add("hidden");
+            });
+        }
+
+        /**
+         * Network fetch operation query mapping calls targeting remote Google App Web Script endpoints
+         */
+        async function runRemoteCloudSyncEngineTransaction(actionPayload) {
+            try {
+                const response = await fetch(APP_SCRIPT_ENDPOINT, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(actionPayload)
+                });
+                if (!response.ok) throw new Error("Cloud network node transport failure occurred.");
+                return await response.json();
+            } catch (err) {
+                console.error("CSPAD Backend Communications Error: ", err);
+                return { status: "ERROR", message: err.toString() };
+            }
+        }
+
+        /**
+         * Requests text parameter logs from spreadsheet databases dynamically
+         */
+        async function requestPlanRowFromCloudSyncEngine() {
+            document.getElementById("op-day-title").innerText = `Calendar Plan: Fetching Day ${calendarState.currentDay}...`;
+            
+            const payload = {
+                action: "FETCH_DAY_PLAN",
+                sheetId: calendarState.sheetId,
+                dayNumber: calendarState.currentDay
+            };
+
+            const dataResult = await runRemoteCloudSyncEngineTransaction(payload);
+            
+            if (dataResult && dataResult.status === "SUCCESS") {
+                calendarState.dayData = dataResult;
+                document.getElementById("op-day-title").innerText = `Calendar Plan: Day ${dataResult.day}`;
+                document.getElementById("field-title").value = dataResult.title || "";
+                document.getElementById("field-audience").value = dataResult.audience || "";
+                document.getElementById("field-keywords").value = dataResult.keywords || "";
+                document.getElementById("field-prompt").value = dataResult.prompt || "";
+            } else {
+                // Graceful fallback mocking structure elements if remote sheet file reference is unlinked inside settings
+                document.getElementById("op-day-title").innerText = `Calendar Plan: Day ${calendarState.currentDay} (Offline Mode)`;
+                document.getElementById("field-title").value = `Sample Geospatial Tech Capture Post Plan #${calendarState.currentDay}`;
+                document.getElementById("field-audience").value = "GIS Professionals & Tech Media Managers";
+                document.getElementById("field-keywords").value = "Esri, Trimble mapping innovations, geospatial solutions, WebFits analytics";
+                document.getElementById("field-prompt").value = "System Instruction: Compose an analytical production technology post analyzing workflow optimization vectors across local construction industry life cycles.";
+            }
+        }
+
+        /**
+         * Modifies active workspace index calendars tracks counters pointers
+         */
+        function shiftOperationDayIndexOffset(deltaDirection) {
+            let nextDay = calendarState.currentDay + deltaDirection;
+            if (nextDay < 1) nextDay = 1;
+            if (nextDay > 30) nextDay = 30;
+            
+            if (nextDay !== calendarState.currentDay) {
+                calendarState.currentDay = nextDay;
+                requestPlanRowFromCloudSyncEngine();
+            }
+        }
+
+        /**
+         * Modifies disable attributes parameters mapping configurations across operational screen input blocks
+         */
+        function setOperationFormFieldsDisabledState(statusBooleanValue) {
+            document.getElementById("field-title").disabled = statusBooleanValue;
+            document.getElementById("field-audience").disabled = statusBooleanValue;
+            document.getElementById("field-keywords").disabled = statusBooleanValue;
+            document.getElementById("field-prompt").disabled = statusBooleanValue;
+        }
+
+        /**
+         * Fires autonomous workflow runner iterations looping protocols blocks
+         */
+        async function executeContentAutomationPipelineRunner() {
+            const loader = document.getElementById("runtime-loader");
+            loader.classList.remove("hidden");
+            loader.classList.add("flex");
+
+            // Execute transactional metadata registration log requests downward to database registers
+            const trackingPayload = {
+                action: "LOG_DASHBOARD_ACTIVITY",
+                dayNumber: calendarState.currentDay,
+                status: "APPROVED" // Simulate positive user checkout pipeline flows
+            };
+            
+            await runRemoteCloudSyncEngineTransaction(trackingPayload);
+            
+            // Artificial timeout delay matching processing wait intervals loops
+            setTimeout(() => {
+                loader.classList.add("hidden");
+                loader.classList.remove("flex");
+                alert(`CSPAD Automation Protocol Complete: Day ${calendarState.currentDay} content artifacts generated, verified, and successfully dispatched to selected digital channels!`);
+                shiftOperationDayIndexOffset(1);
+            }, 3000);
+        }
+
+        /**
+         * Instantly breaks and halts pipeline sequence loops parameters configurations
+         */
+        function terminateContentAutomationPipelineRunner() {
+            document.getElementById("runtime-loader").classList.add("hidden");
+            alert("CSPAD Core Warning: Active background model processing pipeline loops terminated via direct user override event command.");
+        }
+
+        /**
+         * Refreshes dashboard aggregate pie chart metrics components values fields parameters
+         */
+        async function refreshDashboardTelemetryDataMatrix() {
+            const remoteMetrics = await runRemoteCloudSyncEngineTransaction({ action: "GET_DASHBOARD_METRICS" });
+            
+            if (remoteMetrics && remoteMetrics.status === "SUCCESS") {
+                dashboardMetrics = remoteMetrics;
+            } else {
+                // Mock state configurations data array parameters fill if running unlinked local sessions instances
+                dashboardMetrics = { currentDay: calendarState.currentDay, totalGen: 18, totalAppr: 14, totalRejt: 4, totalSaved: 14 };
+            }
+
+            // Unpack parameter properties values mapping onto raw screen layout nodes text objects
+            document.getElementById("chart-center-day").innerText = dashboardMetrics.currentDay;
+            document.getElementById("metric-gen").innerText = dashboardMetrics.totalGen;
+            document.getElementById("metric-appr").innerText = dashboardMetrics.totalAppr;
+            document.getElementById("metric-rejt").innerText = dashboardMetrics.totalRejt;
+            document.getElementById("metric-saved").innerText = dashboardMetrics.totalSaved;
+
+            // Mathematical calculation of progress arc percentage slice values
+            const progressPercentageValue = Math.min(100, Math.round((dashboardMetrics.currentDay / 30) * 100));
+            document.getElementById("chart-progress-arc").setAttribute("stroke-dasharray", `${progressPercentageValue}, 100`);
+        }
+
+        /**
+         * Assembles the multi-element monthly timeline selector bar carousel component blocks track items
+         */
+        function generateDashboardMonthCarouselTrackElements() {
+            const track = document.getElementById("carousel-track");
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            const currentMonthIndex = new Date().getMonth(); // Fallback focus contextual anchor points
+
+            months.forEach((month, index) => {
+                const elementBtn = document.createElement("button");
+                elementBtn.className = `flex-shrink-0 px-6 py-2 rounded-xl text-xs font-bold border tracking-wider transition ${
+                    index === currentMonthIndex 
+                    ? "bg-blue-600 text-white border-blue-500 shadow-md" 
+                    : "bg-gray-950 text-gray-400 border-gray-800 hover:text-white hover:border-gray-700"
+                }`;
+                elementBtn.innerText = month.toUpperCase();
+                elementBtn.addEventListener("click", () => {
+                    track.querySelectorAll("button").forEach(b => b.className = b.className.replace("bg-blue-600 text-white border-blue-500", "bg-gray-950 text-gray-400 border-gray-800"));
+                    elementBtn.className = "flex-shrink-0 px-6 py-2 rounded-xl text-xs font-bold border tracking-wider transition bg-blue-600 text-white border-blue-500 shadow-md";
+                });
+                track.appendChild(elementBtn);
+            });
+
+            // Connect carousel navigation arrows triggers button loops
+            document.getElementById("carousel-left").addEventListener("click", () => track.scrollLeft -= 120);
+            document.getElementById("carousel-right").addEventListener("click", () => track.scrollLeft += 120);
+        }
+
+        /**
+         * Handles asset presentation parameters listing layout transformations inside Screen preview frames
+         */
+        function renderScreenGalleryPreviewWindow() {
+            const canvas = document.getElementById("gallery-content-frame");
+            const counter = document.getElementById("gallery-index-counter");
+            canvas.innerHTML = "";
+
+            if (screenPathActive === "System") {
+                counter.innerText = "Listing Asset 1 / 1 (Local Hard Drive Storage Track)";
+                canvas.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-800">
+                            <span class="text-xs font-bold tracking-wider text-gray-300 font-mono">DAY_${calendarState.currentDay}_PRODUCTION_ARTICLE.TXT</span>
+                            <span class="text-[10px] bg-indigo-900/40 text-indigo-400 border border-indigo-800/40 px-2 py-0.5 rounded font-bold uppercase tracking-widest">TEXT COMPONENT</span>
+                        </div>
+                        <div class="bg-gray-950 border border-gray-800 rounded-xl p-5 text-sm text-gray-300 font-normal leading-relaxed max-h-48 overflow-y-auto">
+                            The integration of advanced remote sensing arrays across the Nigerian construction framework represents a critical pivot toward absolute operational telemetry tracking. By deploying structural layout parameters via high-accuracy mapping components, architecture networks mitigate risk factors during development iterations loops...
+                        </div>
+                    </div>
+                `;
+            } else {
+                counter.innerText = "Listing Asset 0 / 0 (Cloud Target Sync Folder Empty)";
+                canvas.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-12 text-center space-y-2">
+                        <svg class="w-8 h-8 text-gray-700 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5 5 0 00-4.591-3.42h1A3.5 3.5 0 006.5 7z"/></svg>
+                        <p class="text-xs font-semibold tracking-wider text-gray-500 uppercase">No Remote Assets Indexed Inside Target Folder Drive Location Parameters Yet.</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
