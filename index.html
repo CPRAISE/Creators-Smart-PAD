@@ -53,7 +53,6 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- SPLASH SCREEN COMPONENT -->
     <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#070a12] transition-opacity duration-1000">
         <div class="text-center animate-fade-zoom p-6 relative max-w-lg">
             <h1 id="splash-title" class="heading-font text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-2 transition-all duration-1000">
@@ -67,10 +66,9 @@
         </div>
     </div>
 
-    <!-- CORE HEADER PLATFORM -->
     <header class="bg-[#111827]/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
+            <div id="connection-indicator" class="w-3 h-3 rounded-full bg-red-500 transition-colors duration-500 shadow-[0_0_8px_rgba(239,68,68,0.7)]"></div>
             <span id="header-title" class="heading-font text-xl font-bold tracking-wider text-white">CSPAD</span>
         </div>
         <button id="menu-btn" class="p-2 text-gray-400 hover:text-white focus:outline-none relative z-50">
@@ -88,7 +86,6 @@
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-8 relative">
-        <!-- 1. HOME VIEW SCREEN -->
         <section id="view-home" class="view-panel space-y-12 max-w-5xl mx-auto">
             <div class="text-center py-6">
                 <h2 class="heading-font text-4xl font-extrabold text-white mb-3">AI Automation Workstation</h2>
@@ -128,7 +125,6 @@
             </div>
         </section>
 
-        <!-- 2. OPERATIONS ENGINE VIEW -->
         <section id="view-operation" class="view-panel hidden max-w-4xl mx-auto space-y-6">
             <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-6 shadow-xl">
                 <div class="flex justify-between items-center border-b border-gray-800 pb-4">
@@ -184,7 +180,6 @@
             </div>
         </section>
 
-        <!-- 3. DASHBOARD METRICS CHART VIEW -->
         <section id="view-dashboard" class="view-panel hidden max-w-5xl mx-auto space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                 <div class="bg-gray-900 border border-gray-800 p-6 rounded-2xl flex flex-col items-center justify-center shadow-xl relative min-h-[280px]">
@@ -233,7 +228,6 @@
             </div>
         </section>
 
-        <!-- 4. SCREEN STORAGE PREVIEW GALLERY VIEW -->
         <section id="view-screen" class="view-panel hidden max-w-5xl mx-auto space-y-6">
             <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                 <div class="flex space-x-2 bg-gray-950 p-1 rounded-xl border border-gray-800">
@@ -252,7 +246,6 @@
             </div>
         </section>
 
-        <!-- 5. BROWSER STUDIO INTEGRATION VIEW -->
         <section id="view-browser" class="view-panel hidden max-w-6xl mx-auto space-y-4">
             <div class="bg-gray-900 border border-gray-800 rounded-xl p-3 flex items-center space-x-3 shadow-md">
                 <div class="flex space-x-1.5 px-1">
@@ -301,7 +294,6 @@
             </div>
         </section>
 
-        <!-- 6. CONFIGURATIONS APP SETTINGS VIEW -->
         <section id="view-settings" class="view-panel hidden max-w-4xl mx-auto space-y-6">
             <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-6 shadow-xl">
                 <h2 class="heading-font text-xl font-bold text-white border-b border-gray-800 pb-3">Automation Workspace Settings</h2>
@@ -382,7 +374,6 @@
             </div>
         </section>
 
-        <!-- 7. ABOUT THE PLATFORM SYSTEM INFO VIEW -->
         <section id="view-about" class="view-panel hidden max-w-3xl mx-auto space-y-8 text-center py-6 relative">
             <div class="space-y-1">
                 <h2 class="heading-font text-4xl font-extrabold text-white tracking-wide">Creators Smart PAD</h2>
@@ -421,8 +412,8 @@
     </footer>
 
     <script>
-        // System Core Orchestration Variables (REPLACE THIS WITH YOUR NEW MACRO EXEC LIVE DEDEPLOYMENT LINK)
-        const APP_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbzEl_G8HrDpK3Gbt3Ko9FzR8kRVigzMnuXsan7lB8gbqYjGrqkRD_oc0Cisi9xWeuqK/exec";
+        // System Core Orchestration Variables
+        const APP_SCRIPT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyOSJYJlxF7ThFRLiBsQqwo9efX1ouCG7pkBTzRTxg_og9JdHVjS-PU7U71OaV7rUyg/exec";
         
         let navigationHistory = ["home"];
         let currentActiveView = "home";
@@ -444,6 +435,11 @@
             setupCoreNavigationEngineRouting();
             initializeInterfaceActionTriggers();
             generateDashboardMonthCarouselTrackElements();
+            
+            // Auto-check connection if sheetId is present on load
+            if (calendarState.sheetId) {
+                verifyCloudSyncEngineConnection();
+            }
         });
 
         function loadSavedSettingsFromBrowserStorage() {
@@ -462,6 +458,27 @@
             if (cachedTier) {
                 calendarState.authTier = cachedTier;
                 document.getElementById("config-auth-tier").value = cachedTier;
+            }
+        }
+
+        // Dedicated helper to set indicator visual styles
+        function setConnectionIndicatorState(isConnected) {
+            const indicator = document.getElementById("connection-indicator");
+            if (isConnected) {
+                indicator.classList.remove("bg-red-500", "shadow-[0_0_8px_rgba(239,68,68,0.7)]");
+                indicator.classList.add("bg-green-500", "shadow-[0_0_12px_rgba(34,197,94,0.9)]", "animate-pulse");
+            } else {
+                indicator.classList.remove("bg-green-500", "shadow-[0_0_12px_rgba(34,197,94,0.9)]", "animate-pulse");
+                indicator.classList.add("bg-red-500", "shadow-[0_0_8px_rgba(239,68,68,0.7)]");
+            }
+        }
+
+        async function verifyCloudSyncEngineConnection() {
+            const response = await runRemoteCloudSyncEngineTransaction({ action: "VERIFY_CONNECTION" });
+            if (response && response.status === "SUCCESS") {
+                setConnectionIndicatorState(true);
+            } else {
+                setConnectionIndicatorState(false);
             }
         }
 
@@ -564,8 +581,7 @@
             document.getElementById("begin-process-btn").addEventListener("click", executeContentAutomationPipelineRunner);
             document.getElementById("stop-process-btn").addEventListener("click", terminateContentAutomationPipelineRunner);
 
-            // LOCKED FIXED: Captures, applies, and caches all dropdown items to global objects
-            document.getElementById("save-settings-btn").addEventListener("click", () => {
+            document.getElementById("save-settings-btn").addEventListener("click", async () => {
                 const sheetIdInput = document.getElementById("config-sheet-id").value.trim();
                 const providerInput = document.getElementById("config-ai-provider").value;
                 const tierInput = document.getElementById("config-auth-tier").value;
@@ -583,6 +599,8 @@
                 localStorage.setItem("cspad_ai_provider", providerInput);
                 localStorage.setItem("cspad_auth_tier", tierInput);
 
+                // Run connection test immediately following verification
+                await verifyCloudSyncEngineConnection();
                 alert("CSPAD Core Sync parameters cached and verified inside memory banks.");
             });
 
@@ -625,6 +643,7 @@
                 return await response.json();
             } catch (err) {
                 console.error("Database Bridge Error: ", err);
+                setConnectionIndicatorState(false);
                 return { status: "ERROR", message: err.toString() };
             }
         }
@@ -647,6 +666,7 @@
             const dataResult = await runRemoteCloudSyncEngineTransaction(payload);
             
             if (dataResult && dataResult.status === "SUCCESS") {
+                setConnectionIndicatorState(true);
                 calendarState.dayData = dataResult;
                 document.getElementById("op-day-title").innerText = `Calendar Plan: Day ${dataResult.day}`;
                 document.getElementById("field-title").value = dataResult.title || "";
@@ -689,7 +709,6 @@
             loader.classList.remove("hidden");
             loader.classList.add("flex");
 
-            // FIXED TARGETS: Package layout values to commit file saves directly to drive configurations
             const textToSaveText = `Title: ${document.getElementById("field-title").value}\nAudience: ${document.getElementById("field-audience").value}\nKeywords: ${document.getElementById("field-keywords").value}\nGenerated content using provider context model.`;
 
             await runRemoteCloudSyncEngineTransaction({
@@ -729,6 +748,7 @@
             const remoteMetrics = await runRemoteCloudSyncEngineTransaction({ action: "GET_DASHBOARD_METRICS" });
             
             if (remoteMetrics && remoteMetrics.status === "SUCCESS") {
+                setConnectionIndicatorState(true);
                 dashboardMetrics = remoteMetrics;
             } else {
                 dashboardMetrics = { currentDay: calendarState.currentDay, totalGen: 0, totalAppr: 0, totalRejt: 0, totalSaved: 0 };
@@ -768,7 +788,6 @@
             document.getElementById("carousel-right").addEventListener("click", () => track.scrollLeft += 120);
         }
 
-        // LOCKED FIXED: Pulls active file matrix indicators straight from cloud folder paths live
         async function renderScreenGalleryPreviewWindow() {
             const canvas = document.getElementById("gallery-content-frame");
             const counter = document.getElementById("gallery-index-counter");
@@ -788,11 +807,11 @@
                     </div>
                 `;
             } else {
-                // Query live cloud folder logs via sync architecture call routines
                 counter.innerText = "Querying live catalog logs from Google Drive...";
                 const cloudAssetsResult = await runRemoteCloudSyncEngineTransaction({ action: "FETCH_CLOUD_ASSETS" });
                 
                 if (cloudAssetsResult && cloudAssetsResult.status === "SUCCESS" && cloudAssetsResult.files.length > 0) {
+                    setConnectionIndicatorState(true);
                     counter.innerText = `Listing ${cloudAssetsResult.files.length} Live Cloud Assets`;
                     cloudAssetsResult.files.forEach(file => {
                         const fileRow = document.createElement("div");
